@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Robotic Arm Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">SA</div>
+                <h1 class="header-title">Smart Robotic Arm Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <div class="status-dot"></div>
+                    <span id="connectionText">Connecting...</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="control-panel">
+                <h3 class="panel-title">Control Panel</h3>
+                
+                <!-- Mode Toggle -->
+                <div class="mode-toggle">
+                    <button class="mode-btn active" id="autoModeBtn" data-mode="auto">
+                        Automatic
+                    </button>
+                    <button class="mode-btn" id="manualModeBtn" data-mode="manual">
+                        Manual
+                    </button>
+                </div>
+
+                <!-- Manual Controls -->
+                <div class="manual-controls" id="manualControls">
+                    <div class="control-group">
+                        <label class="control-label">Servo Controls</label>
+                        <div class="servo-controls">
+                            <div class="servo-control">
+                                <label for="servoBase">Base</label>
+                                <input type="range" id="servoBase" class="servo-slider" min="0" max="180" value="90" data-servo="0">
+                                <span class="servo-value">90°</span>
+                            </div>
+                            <div class="servo-control">
+                                <label for="servoShoulder">Shoulder</label>
+                                <input type="range" id="servoShoulder" class="servo-slider" min="0" max="180" value="90" data-servo="1">
+                                <span class="servo-value">90°</span>
+                            </div>
+                            <div class="servo-control">
+                                <label for="servoElbow">Elbow</label>
+                                <input type="range" id="servoElbow" class="servo-slider" min="0" max="180" value="90" data-servo="2">
+                                <span class="servo-value">90°</span>
+                            </div>
+                            <div class="servo-control">
+                                <label for="servoWrist">Wrist</label>
+                                <input type="range" id="servoWrist" class="servo-slider" min="0" max="180" value="90" data-servo="3">
+                                <span class="servo-value">90°</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Direction Controls</label>
+                        <div class="direction-controls">
+                            <button class="direction-btn" data-direction="up" aria-label="Move up">↑</button>
+                            <button class="direction-btn" data-direction="left" aria-label="Move left">←</button>
+                            <button class="direction-btn grab-btn" data-action="grab" aria-label="Grab">GRAB</button>
+                            <button class="direction-btn" data-direction="right" aria-label="Move right">→</button>
+                            <button class="direction-btn" data-direction="down" aria-label="Move down">↓</button>
+                        </div>
+                    </div>
+
+                    <button class="emergency-btn" id="emergencyStop">
+                        EMERGENCY STOP
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Monitoring Panel -->
+            <section class="monitoring-panel">
+                <h3 class="panel-title">System Monitoring</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="grabCount">0</div>
+                        <div class="stat-label">Objects Grabbed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="successRate">0%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="distance">0.0</div>
+                        <div class="stat-label">Distance (cm)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="uptime">00:00:00</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Panel -->
+            <section class="stats-panel">
+                <h3 class="panel-title">System Status</h3>
+                <div class="system-status">
+                    <div class="status-item">
+                        <span>Current Mode</span>
+                        <span class="status-value" id="currentMode">Automatic</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Vision System</span>
+                        <span class="status-value success" id="visionStatus">Active</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Motor Speed</span>
+                        <span class="status-value" id="motorSpeed">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Last Detection</span>
+                        <span class="status-value" id="lastDetection">None</span>
+                    </div>
+                    <div class="status-item">
+                        <span>System Health</span>
+                        <span class="status-value success" id="systemHealth">Good</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Panel -->
+            <section class="charts-panel">
+                <h3 class="panel-title">Performance Analytics</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-period="daily">Daily</button>
+                    <button class="chart-btn" data-period="weekly">Weekly</button>
+                    <button class="chart-btn" data-period="monthly">Monthly</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="operationsChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Events Panel -->
+            <section class="events-panel">
+                <h3 class="panel-title">Event Log</h3>
+                <div class="event-log" id="eventLog">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading events...
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="page.js"></script>
+</body>
+</html>

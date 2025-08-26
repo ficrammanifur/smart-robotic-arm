@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Smart Robotic Arm with Vision Tracking"
+version: "1.0.0"
+date-released: "2024-01-01"
+authors:
+  - family-names: "Developer"
+    given-names: "Smart Robotics"
+    email: "developer@smartrobotics.com"
+repository-code: "https://github.com/smartrobotics/SmartArm-Vision"
+abstract: "A smart robotic arm system with computer vision tracking capabilities, designed for Raspberry Pi 5 with automatic and manual control via web dashboard."
+keywords:
+  - "robotics"
+  - "computer vision"
+  - "raspberry pi"
+  - "automation"
+  - "MQTT"
+  - "web dashboard"
+license: "MIT"

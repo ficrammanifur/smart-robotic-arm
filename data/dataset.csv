@@ -1,0 +1,6 @@
+timestamp,mode,objects_detected,grab_success,distance_cm,servo_base,servo_shoulder,servo_elbow,servo_wrist,gripper_state
+2024-01-01 10:00:00,auto,1,true,15.5,90,45,120,90,closed
+2024-01-01 10:01:00,auto,2,true,12.3,85,50,115,85,closed
+2024-01-01 10:02:00,manual,0,false,0,90,90,90,90,open
+2024-01-01 10:03:00,auto,1,true,18.7,95,40,125,95,closed
+2024-01-01 10:04:00,auto,0,false,0,90,90,90,90,open
