@@ -52,11 +52,11 @@ The Smart Robotic Arm with Vision Tracking is an advanced robotics project desig
 ### Step-by-Step Installation
 
 #### 1. Prepare Raspberry Pi
-\`\`\`bash
+```bash
 # Flash Raspberry Pi OS (64-bit recommended)
 # Enable SSH, Camera, and I2C in raspi-config
 sudo raspi-config
-\`\`\`
+```
 
 #### 2. Hardware Assembly
 - Connect servos to designated GPIO pins
@@ -66,9 +66,9 @@ sudo raspi-config
 - Test all connections
 
 #### 3. Software Installation
-\`\`\`bash
+```bash
 # Download project
-git clone <repository-url>
+git "clone https://github.com/ficrammanifur/smart-robotic-arm"
 cd SmartArm-Vision
 
 # Run automated setup
@@ -77,10 +77,10 @@ chmod +x setup.sh
 
 # Reboot system
 sudo reboot
-\`\`\`
+```
 
 #### 4. Configuration
-\`\`\`bash
+```bash
 # Edit hardware settings
 nano include/config.h
 
@@ -89,10 +89,10 @@ nano Backend\ python/.env
 
 # Test system components
 ./build/SmartArm-Vision --test
-\`\`\`
+```
 
 #### 5. First Run
-\`\`\`bash
+```bash
 # Start hardware controller
 ./build/SmartArm-Vision &
 
@@ -102,7 +102,7 @@ python main.py &
 
 # Access dashboard
 # Open http://localhost:5000 in browser
-\`\`\`
+```
 
 ## User Manual
 
@@ -169,7 +169,7 @@ python main.py &
 - **Annually**: Replace worn components
 
 ### Backup Procedures
-\`\`\`bash
+```bash
 # Backup configuration
 ./scripts/backup.sh config
 
@@ -178,10 +178,10 @@ python main.py &
 
 # Full system backup
 ./scripts/backup.sh full
-\`\`\`
+```
 
 ### Update Procedures
-\`\`\`bash
+```bash
 # Update system packages
 sudo apt update && sudo apt upgrade
 
@@ -190,7 +190,7 @@ git pull origin main
 
 # Rebuild components
 ./scripts/update.sh
-\`\`\`
+```
 
 ## Safety Guidelines
 
@@ -266,7 +266,7 @@ git pull origin main
 ## Advanced Configuration
 
 ### Custom Object Training
-\`\`\`bash
+```bash
 # Prepare training data
 python scripts/prepare_dataset.py
 
@@ -275,10 +275,10 @@ python scripts/train_model.py --data custom_dataset
 
 # Deploy trained model
 cp custom_model.pt Backend\ python/models/
-\`\`\`
+```
 
 ### Network Configuration
-\`\`\`bash
+```bash
 # Configure static IP
 sudo nano /etc/dhcpcd.conf
 
@@ -288,10 +288,10 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
 # Configure firewall
 sudo ufw allow 5000
 sudo ufw allow 1883
-\`\`\`
+```
 
 ### Performance Tuning
-\`\`\`bash
+```bash
 # Increase GPU memory
 echo "gpu_mem=128" | sudo tee -a /boot/config.txt
 
@@ -301,14 +301,14 @@ echo "performance" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_gover
 # Disable unnecessary services
 sudo systemctl disable bluetooth
 sudo systemctl disable wifi-powersave
-\`\`\`
+```
 
 ## API Reference
 
 ### REST API Endpoints
 
 #### System Status
-\`\`\`http
+```http
 GET /api/status
 Response: {
   "mode": "auto|manual",
@@ -318,10 +318,10 @@ Response: {
   "distance_cm": float,
   "motor_speed": int
 }
-\`\`\`
+```
 
 #### Control Commands
-\`\`\`http
+```http
 POST /api/control
 Body: {
   "command": "set_mode|manual_servo|emergency_stop",
@@ -329,22 +329,22 @@ Body: {
   "servo_id": int,
   "angle": int
 }
-\`\`\`
+```
 
 #### Statistics
-\`\`\`http
+```http
 GET /api/statistics?days=7
 Response: {
   "total_operations": int,
   "success_rate": float,
   "daily_operations": object
 }
-\`\`\`
+```
 
 ### WebSocket Events
 
 #### Status Updates
-\`\`\`javascript
+```javascript
 {
   "type": "status",
   "data": {
@@ -353,10 +353,10 @@ Response: {
     "distance_cm": 15.5
   }
 }
-\`\`\`
+```
 
 #### Detection Events
-\`\`\`javascript
+```javascript
 {
   "type": "detections",
   "data": [{
@@ -365,12 +365,12 @@ Response: {
     "bbox": [100, 100, 200, 200]
   }]
 }
-\`\`\`
+```
 
 ## Development Guide
 
 ### Setting Up Development Environment
-\`\`\`bash
+````bash
 # Install development tools
 sudo apt install -y git cmake gdb valgrind
 pip install -r requirements-dev.txt
@@ -381,7 +381,7 @@ pre-commit install
 # Run tests
 make test
 python -m pytest
-\`\`\`
+```
 
 ### Code Structure
 
@@ -410,7 +410,7 @@ python -m pytest
 5. Submit pull request
 
 ### Testing Procedures
-\`\`\`bash
+```bash
 # Unit tests
 python -m pytest tests/unit/
 
@@ -422,7 +422,7 @@ python -m pytest tests/integration/
 
 # Web interface tests
 npm test
-\`\`\`
+```
 
 ## Frequently Asked Questions
 

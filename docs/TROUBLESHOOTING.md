@@ -8,7 +8,7 @@ This guide helps diagnose and resolve common issues with the Smart Robotic Arm s
 
 Before diving into specific issues, run this quick diagnostic:
 
-\`\`\`bash
+```bash
 # System health check
 ./scripts/health_check.sh
 
@@ -22,7 +22,7 @@ curl http://localhost:5000/api/status
 # Service status
 systemctl status mosquitto
 ps aux | grep python
-\`\`\`
+```
 
 ## Hardware Issues
 
@@ -35,7 +35,7 @@ ps aux | grep python
 - No response to manual controls
 
 **Diagnostic Steps:**
-\`\`\`bash
+```bash
 # Test individual servo
 ./build/SmartArm-Vision --test-servo 0
 
@@ -44,32 +44,32 @@ gpio readall | grep -E "(18|19|20|21|22)"
 
 # Verify power supply
 # Use multimeter to check 6V rail
-\`\`\`
+```
 
 **Solutions:**
 1. **Power Supply Check**
-   \`\`\`bash
+   ```bash
    # Measure voltage at servo power rail
    # Should read 6V ±0.5V under load
    # Check current capacity (2A minimum)
-   \`\`\`
+   ```
 
 2. **Wiring Verification**
-   \`\`\`bash
+   ```bash
    # Check connections:
    # Red wire → +6V power rail
    # Brown/Black wire → Ground rail  
    # Orange/Yellow wire → GPIO pin
-   \`\`\`
+   ```
 
 3. **Software Configuration**
-   \`\`\`bash
+   ```bash
    # Verify pin assignments in config.h
    grep -n "SERVO.*PIN" include/config.h
    
    # Rebuild if changes made
    cd build && make
-   \`\`\`
+   ```
 
 #### Issue: Erratic Servo Movement
 **Symptoms:**
@@ -79,25 +79,25 @@ gpio readall | grep -E "(18|19|20|21|22)"
 
 **Solutions:**
 1. **Power Supply Stabilization**
-   \`\`\`bash
+   ```bash
    # Add capacitors to power rails
    # 1000µF across +6V and GND
    # 100µF ceramic capacitors near each servo
-   \`\`\`
+   ```
 
 2. **Mechanical Inspection**
-   \`\`\`bash
+   ```bash
    # Check for binding or obstruction
    # Lubricate moving parts with light oil
    # Verify proper servo horn attachment
-   \`\`\`
+   ```
 
 3. **Signal Quality**
-   \`\`\`bash
+   ```bash
    # Use shielded cables for long runs
    # Keep power and signal wires separated
    # Add ferrite cores to reduce interference
-   \`\`\`
+   ```
 
 ### Sensor Issues
 
@@ -108,38 +108,38 @@ gpio readall | grep -E "(18|19|20|21|22)"
 - Inconsistent measurements
 
 **Diagnostic Steps:**
-\`\`\`bash
+```bash
 # Test sensor directly
 ./build/SmartArm-Vision --test-sensor
 
 # Check wiring with multimeter
 # VCC should read 5V
 # Trigger and Echo pins should toggle
-\`\`\`
+```
 
 **Solutions:**
 1. **Wiring Check**
-   \`\`\`bash
+   ```bash
    # Verify connections:
    # VCC → 5V (Pin 2 or 4)
    # GND → Ground (Pin 6, 9, 14, etc.)
    # Trig → GPIO 23 (Pin 16)
    # Echo → GPIO 24 (Pin 18)
-   \`\`\`
+   ```
 
 2. **Environmental Factors**
-   \`\`\`bash
+   ```bash
    # Ensure clear line of sight
    # Remove acoustic absorbing materials
    # Check for vibration affecting sensor
-   \`\`\`
+   ```
 
 3. **Software Timing**
-   \`\`\`cpp
+   ```cpp
    // Adjust timeout values in sensor_ultrasonic.cpp
    // Increase delay between measurements
    // Check for timing conflicts
-   \`\`\`
+   ```
 
 #### Issue: Camera Not Working
 **Symptoms:**
@@ -148,7 +148,7 @@ gpio readall | grep -E "(18|19|20|21|22)"
 - Poor image quality
 
 **Diagnostic Steps:**
-\`\`\`bash
+```bash
 # Check camera detection
 vcgencmd get_camera
 
@@ -157,11 +157,11 @@ libcamera-hello --timeout 5000
 
 # Python test
 python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
-\`\`\`
+```
 
 **Solutions:**
 1. **Hardware Connection**
-   \`\`\`bash
+   ```bash
    # For Pi Camera:
    # - Reseat ribbon cable in CSI port
    # - Ensure cable lock is engaged
@@ -171,10 +171,10 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    # - Try different USB port
    # - Check USB power requirements
    # - Test with different cable
-   \`\`\`
+   ```
 
 2. **Software Configuration**
-   \`\`\`bash
+   ```bash
    # Enable camera interface
    sudo raspi-config
    # Interface Options → Camera → Enable
@@ -184,15 +184,15 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    
    # Reboot after changes
    sudo reboot
-   \`\`\`
+   ```
 
 3. **Image Quality Issues**
-   \`\`\`bash
+   ```bash
    # Adjust camera settings in vision_tracking.py
    # Improve lighting conditions
    # Clean camera lens
    # Adjust focus (if manual focus camera)
-   \`\`\`
+   ```
 
 ## Software Issues
 
@@ -206,7 +206,7 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
 
 **Solutions:**
 1. **Permission Issues**
-   \`\`\`bash
+   ```bash
    # Add user to gpio group
    sudo usermod -a -G gpio $USER
    
@@ -215,10 +215,10 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    
    # Reboot to apply group changes
    sudo reboot
-   \`\`\`
+   ```
 
 2. **Library Dependencies**
-   \`\`\`bash
+   ```bash
    # Install missing libraries
    sudo apt install -y wiringpi libwiringpi-dev
    
@@ -227,16 +227,16 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    make clean
    cmake ..
    make
-   \`\`\`
+   ```
 
 3. **Hardware Initialization**
-   \`\`\`bash
+   ```bash
    # Check if another process is using GPIO
    sudo lsof /dev/gpiomem
    
    # Kill conflicting processes
    sudo pkill -f SmartArm-Vision
-   \`\`\`
+   ```
 
 #### Issue: Python Backend Fails to Start
 **Symptoms:**
@@ -246,7 +246,7 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
 
 **Solutions:**
 1. **Python Dependencies**
-   \`\`\`bash
+   ```bash
    cd "Backend python"
    
    # Activate virtual environment
@@ -257,10 +257,10 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    
    # Check for conflicts
    pip check
-   \`\`\`
+   ```
 
 2. **Port Conflicts**
-   \`\`\`bash
+   ```bash
    # Check what's using port 5000
    sudo netstat -tulpn | grep :5000
    
@@ -269,10 +269,10 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    
    # Or change port in main.py
    app.run(host='0.0.0.0', port=5001)
-   \`\`\`
+   ```
 
 3. **Environment Variables**
-   \`\`\`bash
+   ```bash
    # Create .env file if missing
    cat > "Backend python/.env" << EOF
    FLASK_ENV=production
@@ -281,7 +281,7 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
    MQTT_BROKER=localhost
    MQTT_PORT=1883
    EOF
-   \`\`\`
+   ```
 
 ### Communication Issues
 
@@ -292,7 +292,7 @@ python3 -c "import cv2; print(cv2.VideoCapture(0).read())"
 - No communication between components
 
 **Diagnostic Steps:**
-\`\`\`bash
+```bash
 # Check MQTT broker status
 sudo systemctl status mosquitto
 
@@ -303,11 +303,11 @@ mosquitto_sub -h localhost -t test
 # Check network connectivity
 ping localhost
 telnet localhost 1883
-\`\`\`
+```
 
 **Solutions:**
 1. **MQTT Broker Issues**
-   \`\`\`bash
+   ```bash
    # Start MQTT broker
    sudo systemctl start mosquitto
    sudo systemctl enable mosquitto
@@ -317,10 +317,10 @@ telnet localhost 1883
    
    # Restart broker
    sudo systemctl restart mosquitto
-   \`\`\`
+   ```
 
 2. **Firewall Issues**
-   \`\`\`bash
+   ```bash
    # Allow MQTT port
    sudo ufw allow 1883
    
@@ -329,10 +329,10 @@ telnet localhost 1883
    
    # Disable firewall temporarily for testing
    sudo ufw disable
-   \`\`\`
+   ```
 
 3. **Network Configuration**
-   \`\`\`bash
+   ```bash
    # Check network interfaces
    ip addr show
    
@@ -341,7 +341,7 @@ telnet localhost 1883
    
    # Check for network conflicts
    netstat -rn
-   \`\`\`
+   ```
 
 #### Issue: WebSocket Connection Problems
 **Symptoms:**
@@ -351,7 +351,7 @@ telnet localhost 1883
 
 **Solutions:**
 1. **WebSocket Server Issues**
-   \`\`\`bash
+   ```bash
    # Check if WebSocket server is running
    netstat -tulpn | grep :8765
    
@@ -364,25 +364,24 @@ telnet localhost 1883
            print('Connected successfully')
    asyncio.run(test())
    "
-   \`\`\`
-
+   ```
 2. **Browser Issues**
-   \`\`\`javascript
+   ```javascript
    // Check browser console for errors
    // Try different browser
    // Clear browser cache and cookies
    // Disable browser extensions
-   \`\`\`
+   ```
 
 3. **Network Proxy Issues**
-   \`\`\`bash
+   ```bash
    # Check for proxy settings
    echo $http_proxy
    echo $https_proxy
    
    # Bypass proxy for localhost
    export no_proxy="localhost,127.0.0.1"
-   \`\`\`
+   ```
 
 ### Performance Issues
 
@@ -393,7 +392,7 @@ telnet localhost 1883
 - High CPU usage
 
 **Diagnostic Steps:**
-\`\`\`bash
+```bash
 # Check system resources
 htop
 iostat 1
@@ -404,11 +403,11 @@ ps -eo pid,ppid,cmd,pri,nice
 
 # Monitor network traffic
 sudo tcpdump -i lo port 1883
-\`\`\`
+```
 
 **Solutions:**
 1. **System Optimization**
-   \`\`\`bash
+   ```bash
    # Increase GPU memory split
    sudo raspi-config
    # Advanced Options → Memory Split → 128
@@ -419,23 +418,23 @@ sudo tcpdump -i lo port 1883
    # Disable unnecessary services
    sudo systemctl disable bluetooth
    sudo systemctl disable wifi-powersave
-   \`\`\`
+   ```
 
 2. **Application Tuning**
-   \`\`\`bash
+   ```bash
    # Reduce camera resolution in vision_tracking.py
    # Lower frame rate for processing
    # Increase servo update intervals
    # Optimize MQTT message frequency
-   \`\`\`
+   ```
 
 3. **Hardware Upgrades**
-   \`\`\`bash
+   ```bash
    # Use faster SD card (Class 10 or better)
    # Add active cooling for Pi
    # Use dedicated power supply (3A minimum)
    # Consider Pi 5 with 8GB RAM
-   \`\`\`
+   ```
 
 #### Issue: Memory Leaks
 **Symptoms:**
@@ -445,7 +444,7 @@ sudo tcpdump -i lo port 1883
 
 **Solutions:**
 1. **Python Memory Management**
-   \`\`\`python
+   ```python
    # Add to vision_tracking.py
    import gc
    
@@ -456,16 +455,16 @@ sudo tcpdump -i lo port 1883
    # Release OpenCV resources properly
    cap.release()
    cv2.destroyAllWindows()
-   \`\`\`
+   ```
 
 2. **C++ Memory Management**
-   \`\`\`cpp
+   ```cpp
    // Check for memory leaks with valgrind
    valgrind --leak-check=full ./build/SmartArm-Vision
    
    // Ensure proper cleanup in destructors
    // Use smart pointers where possible
-   \`\`\`
+   ```
 
 ## Data and Logging Issues
 
@@ -477,7 +476,7 @@ sudo tcpdump -i lo port 1883
 
 **Solutions:**
 1. **File Permissions**
-   \`\`\`bash
+   ```bash
    # Check data directory permissions
    ls -la data/
    
@@ -485,10 +484,10 @@ sudo tcpdump -i lo port 1883
    sudo chown -R $USER:$USER data/
    chmod 755 data/
    chmod 644 data/*.csv
-   \`\`\`
+   ```
 
 2. **Disk Space**
-   \`\`\`bash
+   ```bash
    # Check available space
    df -h
    
@@ -497,7 +496,7 @@ sudo tcpdump -i lo port 1883
    
    # Implement log rotation
    logrotate /etc/logrotate.d/smartarm
-   \`\`\`
+   ```
 
 ## Emergency Procedures
 
@@ -505,7 +504,7 @@ sudo tcpdump -i lo port 1883
 If the system becomes unresponsive or dangerous:
 
 1. **Immediate Actions**
-   \`\`\`bash
+   ```bash
    # Physical emergency stop
    # Press red emergency button (if installed)
    
@@ -515,22 +514,22 @@ If the system becomes unresponsive or dangerous:
    # Kill all processes
    sudo pkill -f SmartArm-Vision
    sudo pkill -f python.*main.py
-   \`\`\`
+   ```
 
 2. **Power Cycle**
-   \`\`\`bash
+   ```bash
    # Safe shutdown
    sudo shutdown -h now
    
    # Wait 10 seconds, then power on
    # Check system logs after restart
    journalctl -u smartarm --since "10 minutes ago"
-   \`\`\`
+   ```
 
 ### System Recovery
 
 #### Corrupted Installation
-\`\`\`bash
+```bash
 # Backup user data
 cp -r data/ ~/smartarm_backup/
 
@@ -541,10 +540,10 @@ git clean -fdx
 
 # Restore data
 cp -r ~/smartarm_backup/* data/
-\`\`\`
+```
 
 #### Hardware Damage Assessment
-\`\`\`bash
+```bash
 # Test each component individually
 ./build/SmartArm-Vision --test-servo 0
 ./build/SmartArm-Vision --test-servo 1
@@ -554,13 +553,13 @@ cp -r ~/smartarm_backup/* data/
 # Document any failures
 # Replace damaged components
 # Recalibrate system after repairs
-\`\`\`
+```
 
 ## Getting Help
 
 ### Log Collection
 Before seeking help, collect these logs:
-\`\`\`bash
+```bash
 # Create support bundle
 mkdir ~/smartarm_logs
 cp /var/log/syslog ~/smartarm_logs/
@@ -576,10 +575,10 @@ df -h >> ~/smartarm_logs/system_info.txt
 
 # Create archive
 tar -czf ~/smartarm_support_$(date +%Y%m%d_%H%M%S).tar.gz ~/smartarm_logs/
-\`\`\`
+```
 
 ### Contact Information
-- **GitHub Issues**: [Project Repository Issues](https://github.com/yourusername/smart-robotic-arm/issues)
+- **GitHub Issues**: [Project Repository Issues](https://github.com/ficrammanifur/smart-robotic-arm)
 - **Documentation**: Check README.md and docs/ folder
 - **Community**: Raspberry Pi forums, robotics communities
 

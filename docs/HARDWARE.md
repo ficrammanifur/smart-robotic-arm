@@ -37,7 +37,7 @@ This guide provides detailed instructions for assembling and configuring the har
 
 ### GPIO Pin Assignment (BCM Numbering)
 
-\`\`\`
+```
 Raspberry Pi 5 GPIO Layout:
      3V3  (1) (2)  5V
    GPIO2  (3) (4)  5V
@@ -59,7 +59,7 @@ Raspberry Pi 5 GPIO Layout:
   GPIO19 (35) (36) GPIO16  ← Motor Dir1
   GPIO26 (37) (38) GPIO20  ← Elbow Servo
      GND (39) (40) GPIO21  ← Wrist Servo
-\`\`\`
+```
 
 ### Servo Connections
 
@@ -95,28 +95,28 @@ Raspberry Pi 5 GPIO Layout:
 ### Step 1: Prepare Raspberry Pi
 
 1. **Flash SD Card**
-   \`\`\`bash
+   ```bash
    # Download Raspberry Pi Imager
    # Flash Raspberry Pi OS (64-bit) to SD card
    # Enable SSH, Camera, I2C in advanced options
-   \`\`\`
+   ```
 
 2. **Initial Boot Setup**
-   \`\`\`bash
+   ```bash
    # Insert SD card and boot Pi
    # Complete initial setup wizard
    # Update system
    sudo apt update && sudo apt upgrade -y
-   \`\`\`
+   ```
 
 3. **Enable Required Interfaces**
-   \`\`\`bash
+   ```bash
    sudo raspi-config
    # Interface Options > Camera > Enable
    # Interface Options > I2C > Enable
    # Interface Options > SPI > Enable (if needed)
    # Reboot when prompted
-   \`\`\`
+   ```
 
 ### Step 2: Power Supply Setup
 
@@ -134,7 +134,7 @@ Raspberry Pi 5 GPIO Layout:
 ### Step 3: Servo Assembly
 
 1. **Mechanical Assembly**
-   \`\`\`
+   ```
    Base Servo (GPIO 18):
    - Mount horizontally as rotation base
    - Attach arm segments with servo horns
@@ -159,21 +159,21 @@ Raspberry Pi 5 GPIO Layout:
    - Mount at end of wrist
    - Connect to gripper mechanism
    - Test open/close operation
-   \`\`\`
+   ```
 
 2. **Electrical Connections**
-   \`\`\`
+   ```
    For each servo:
    1. Connect red wire to +6V power rail
    2. Connect brown/black wire to ground rail
    3. Connect orange/yellow wire to assigned GPIO pin
    4. Use breadboard for clean connections
-   \`\`\`
+   ```
 
 ### Step 4: Sensor Installation
 
 1. **Ultrasonic Sensor (HC-SR04)**
-   \`\`\`
+   ```
    Mounting:
    - Position for clear line of sight
    - Mount securely to avoid vibration
@@ -184,10 +184,10 @@ Raspberry Pi 5 GPIO Layout:
    - GND to Ground (Pin 6, 9, 14, 20, 25, 30, 34, or 39)
    - Trig to GPIO 23 (Pin 16)
    - Echo to GPIO 24 (Pin 18)
-   \`\`\`
+   ```
 
 2. **Camera Module**
-   \`\`\`
+   ```
    Pi Camera v3:
    - Connect ribbon cable to CSI port
    - Ensure cable is fully inserted
@@ -198,12 +198,12 @@ Raspberry Pi 5 GPIO Layout:
    - Connect to USB 3.0 port for best performance
    - Verify compatibility with OpenCV
    - Test with v4l2-ctl --list-devices
-   \`\`\`
+   ```
 
 ### Step 5: Motor Driver (Optional)
 
 1. **L298N Motor Driver**
-   \`\`\`
+   ```
    Connections:
    - VCC to 5V (logic power)
    - GND to Pi ground
@@ -212,7 +212,7 @@ Raspberry Pi 5 GPIO Layout:
    - IN2 to GPIO 26 (direction)
    - Motor terminals to external motor
    - Motor power to separate 12V supply
-   \`\`\`
+   ```
 
 ### Step 6: Wiring Best Practices
 
@@ -222,14 +222,14 @@ Raspberry Pi 5 GPIO Layout:
    - Twisted pairs for long runs
 
 2. **Color Coding**
-   \`\`\`
+   ```
    Red:    Positive power (+5V, +6V)
    Black:  Ground (GND)
    Yellow: Digital signals
    Green:  Analog signals
    Blue:   Communication (I2C, SPI)
    White:  Special functions
-   \`\`\`
+   ```
 
 3. **Strain Relief**
    - Secure cables at connection points
@@ -245,7 +245,7 @@ Raspberry Pi 5 GPIO Layout:
 
 ### Step 1: Basic Hardware Test
 
-\`\`\`bash
+```bash
 # Test GPIO functionality
 gpio readall
 
@@ -254,30 +254,30 @@ libcamera-hello --timeout 5000
 
 # Test I2C devices (if any)
 i2cdetect -y 1
-\`\`\`
+```
 
 ### Step 2: Individual Component Tests
 
 1. **Servo Test**
-   \`\`\`bash
+   ```bash
    # Build and run hardware test
    cd SmartArm-Vision
    mkdir build && cd build
    cmake ..
    make
    ./SmartArm-Vision --test-servos
-   \`\`\`
+   ```
 
 2. **Sensor Test**
-   \`\`\`bash
+   ```bash
    # Test ultrasonic sensor
    ./SmartArm-Vision --test-sensor
    
    # Expected output: Distance readings in cm
-   \`\`\`
+   ```
 
 3. **Camera Test**
-   \`\`\`bash
+   ```bash
    # Test camera capture
    python3 -c "
    import cv2
@@ -286,11 +286,11 @@ i2cdetect -y 1
    print(f'Camera test: {ret}, Frame shape: {frame.shape if ret else None}')
    cap.release()
    "
-   \`\`\`
+   ```
 
 ### Step 3: System Integration Test
 
-\`\`\`bash
+```bash
 # Run full system test
 ./SmartArm-Vision --test-all
 
@@ -300,12 +300,12 @@ i2cdetect -y 1
 # ✓ Camera initialized
 # ✓ MQTT connection established
 # ✓ All systems operational
-\`\`\`
+```
 
 ### Step 4: Calibration
 
 1. **Servo Calibration**
-   \`\`\`bash
+   ```bash
    # Run calibration routine
    ./SmartArm-Vision --calibrate-servos
    
@@ -314,10 +314,10 @@ i2cdetect -y 1
    # - Set maximum positions  
    # - Set home position
    # - Test full range of motion
-   \`\`\`
+   ```
 
 2. **Camera Calibration**
-   \`\`\`bash
+   ```bash
    # Calibrate camera position and focus
    python3 Backend\ python/vision_tracking.py --calibrate
    
@@ -325,17 +325,17 @@ i2cdetect -y 1
    # - Focus for sharp images
    # - Position for optimal view
    # - Lighting for good contrast
-   \`\`\`
+   ```
 
 3. **Workspace Calibration**
-   \`\`\`bash
+   ```bash
    # Define workspace boundaries
    ./SmartArm-Vision --calibrate-workspace
    
    # Mark safe operating area
    # Set object detection zones
    # Configure collision avoidance
-   \`\`\`
+   ```
 
 ## Troubleshooting
 
@@ -417,32 +417,32 @@ i2cdetect -y 1
 
 #### Reduce Latency
 1. **System Configuration**
-   \`\`\`bash
+   ```bash
    # Increase GPU memory
    echo "gpu_mem=128" | sudo tee -a /boot/config.txt
    
    # Set CPU governor to performance
    echo "performance" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-   \`\`\`
+   ```
 
 2. **Real-time Scheduling**
-   \`\`\`bash
+   ```bash
    # Run control loop with higher priority
    sudo chrt -f 50 ./SmartArm-Vision
-   \`\`\`
+   ```
 
 #### Improve Reliability
 1. **Watchdog Timer**
-   \`\`\`bash
+   ```bash
    # Enable hardware watchdog
    echo "dtparam=watchdog=on" | sudo tee -a /boot/config.txt
-   \`\`\`
+   ```
 
 2. **Automatic Recovery**
-   \`\`\`bash
+   ```bash
    # Create systemd service for auto-restart
    sudo systemctl enable smartarm.service
-   \`\`\`
+   ```
 
 ## Maintenance Schedule
 

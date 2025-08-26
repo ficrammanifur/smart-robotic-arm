@@ -6,9 +6,9 @@ The Smart Robotic Arm provides a comprehensive REST API and WebSocket interface 
 
 ## Base URL
 
-\`\`\`
+```
 http://localhost:5000/api
-\`\`\`
+```
 
 ## Authentication
 
@@ -19,12 +19,12 @@ Currently, the API does not require authentication. For production deployments, 
 ### System Status
 
 #### Get System Status
-\`\`\`http
+```http
 GET /api/status
-\`\`\`
+```
 
 **Response:**
-\`\`\`json
+```json
 {
   "mode": "auto",
   "vision_active": true,
@@ -47,85 +47,85 @@ GET /api/status
   "grab_count": 5,
   "error_message": ""
 }
-\`\`\`
+```
 
 ### Control Commands
 
 #### Send Control Command
-\`\`\`http
+```http
 POST /api/control
 Content-Type: application/json
-\`\`\`
+```
 
 **Request Body:**
-\`\`\`json
+```json
 {
   "command": "set_mode",
   "mode": "manual"
 }
-\`\`\`
+```
 
 **Available Commands:**
 
 ##### Set Mode
-\`\`\`json
+```json
 {
   "command": "set_mode",
   "mode": "auto|manual"
 }
-\`\`\`
+```
 
 ##### Manual Servo Control
-\`\`\`json
+```json
 {
   "command": "manual_servo",
   "servo_id": 0,
   "angle": 90
 }
-\`\`\`
+```
 
 ##### Manual Motor Control
-\`\`\`json
+```json
 {
   "command": "manual_motor",
   "speed": 50
 }
-\`\`\`
+```
 
 ##### Emergency Stop
-\`\`\`json
+```json
 {
   "command": "emergency_stop"
 }
-\`\`\`
+```
 
 ##### Home Position
-\`\`\`json
+```json
 {
   "command": "home_position"
 }
-\`\`\`
+```
 
 **Response:**
-\`\`\`json
+```json
 {
   "success": true,
   "message": "Command executed successfully"
 }
-\`\`\`
+```
 
 ### Statistics
 
 #### Get Performance Statistics
-\`\`\`http
+```http
 GET /api/statistics?days=7
-\`\`\`
+```
 
 **Parameters:**
 - `days` (optional): Number of days to analyze (default: 7)
 
 **Response:**
-\`\`\`json
+```json
 {
   "total_operations": 150,
   "successful_grabs": 120,
@@ -142,17 +142,17 @@ GET /api/statistics?days=7
     "2024-01-03": 20
   }
 }
-\`\`\`
+```
 
 ### Vision System
 
 #### Get Current Detections
-\`\`\`http
+```http
 GET /api/detections
-\`\`\`
+```
 
 **Response:**
-\`\`\`json
+```json
 {
   "detections": [
     {
@@ -168,43 +168,43 @@ GET /api/detections
     }
   ]
 }
-\`\`\`
+```
 
 #### Get Camera Frame
-\`\`\`http
+```http
 GET /api/camera/frame
-\`\`\`
+```
 
 **Response:**
-\`\`\`json
+```json
 {
   "frame": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
 }
-\`\`\`
+```
 
 ## WebSocket API
 
 ### Connection
 
 Connect to WebSocket endpoint:
-\`\`\`
+```
 ws://localhost:8765
-\`\`\`
+```
 
 ### Message Format
 
 All WebSocket messages follow this format:
-\`\`\`json
+```json
 {
   "type": "message_type",
   "data": { ... }
 }
-\`\`\`
+```
 
 ### Incoming Messages (Server to Client)
 
 #### Status Updates
-\`\`\`json
+```json
 {
   "type": "status",
   "data": {
@@ -216,10 +216,10 @@ All WebSocket messages follow this format:
     "motor_speed": 0
   }
 }
-\`\`\`
+```
 
 #### Detection Events
-\`\`\`json
+```json
 {
   "type": "detections",
   "data": [
@@ -231,10 +231,10 @@ All WebSocket messages follow this format:
     }
   ]
 }
-\`\`\`
+```
 
 #### System Events
-\`\`\`json
+```json
 {
   "type": "event",
   "data": {
@@ -243,12 +243,12 @@ All WebSocket messages follow this format:
     "timestamp": "2024-01-01T10:00:00Z"
   }
 }
-\`\`\`
+```
 
 ### Outgoing Messages (Client to Server)
 
 #### Command Messages
-\`\`\`json
+```json
 {
   "type": "command",
   "data": {
@@ -256,7 +256,7 @@ All WebSocket messages follow this format:
     "mode": "manual"
   }
 }
-\`\`\`
+```
 
 ## MQTT Topics
 
@@ -264,33 +264,33 @@ All WebSocket messages follow this format:
 **Topic:** `smartarm/control`
 
 **Message Format:** Plain text commands
-\`\`\`
+```
 MODE AUTO
 MODE MANUAL
 SERVO 0 90
 MOTOR 50
 STOP
 HOME
-\`\`\`
+```
 
 ### Status Topic
 **Topic:** `smartarm/status`
 
 **Message Format:** JSON
-\`\`\`json
+```json
 {
   "mode": "auto",
   "distance": 15.5,
   "servos": [90, 45, 120, 90, 180],
   "motor_speed": 0
 }
-\`\`\`
+```
 
 ### Data Topic
 **Topic:** `smartarm/data`
 
 **Message Format:** JSON
-\`\`\`json
+```json
 {
   "timestamp": "2024-01-01T10:00:00Z",
   "operation": "grab",
@@ -298,7 +298,7 @@ HOME
   "object_detected": "bottle",
   "execution_time": 2500
 }
-\`\`\`
+```
 
 ## Error Handling
 
@@ -309,7 +309,7 @@ HOME
 - `500 Internal Server Error`: Server error
 
 ### Error Response Format
-\`\`\`json
+```json
 {
   "error": "Error description",
   "code": "ERROR_CODE",
@@ -317,7 +317,7 @@ HOME
     "field": "Additional error details"
   }
 }
-\`\`\`
+```
 
 ### Common Error Codes
 - `INVALID_COMMAND`: Unknown command type
@@ -335,7 +335,7 @@ HOME
 ## Usage Examples
 
 ### Python Client Example
-\`\`\`python
+```python
 import requests
 import json
 
@@ -365,10 +365,10 @@ response = requests.post(
     'http://localhost:5000/api/control',
     json=servo_data
 )
-\`\`\`
+```
 
 ### JavaScript WebSocket Example
-\`\`\`javascript
+```javascript
 const ws = new WebSocket('ws://localhost:8765');
 
 ws.onopen = function() {
@@ -400,10 +400,10 @@ const command = {
     }
 };
 ws.send(JSON.stringify(command));
-\`\`\`
+```
 
 ### MQTT Client Example
-\`\`\`python
+```python
 import paho.mqtt.client as mqtt
 import json
 
@@ -425,12 +425,12 @@ client.connect("localhost", 1883, 60)
 client.publish("smartarm/control", "MODE AUTO")
 
 client.loop_forever()
-\`\`\`
+```
 
 ## SDK and Libraries
 
 ### Python SDK
-\`\`\`python
+```python
 from smartarm_sdk import SmartArmClient
 
 client = SmartArmClient('http://localhost:5000')
@@ -446,10 +446,10 @@ client.move_servo(0, 90)
 
 # Get statistics
 stats = client.get_statistics(days=7)
-\`\`\`
+```
 
 ### JavaScript SDK
-\`\`\`javascript
+```javascript
 import { SmartArmClient } from 'smartarm-js-sdk';
 
 const client = new SmartArmClient('http://localhost:5000');
@@ -467,7 +467,7 @@ await client.moveServo(0, 90);
 client.onStatusUpdate((status) => {
     console.log('Status:', status);
 });
-\`\`\`
+```
 
 ## Changelog
 
