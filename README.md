@@ -34,7 +34,7 @@
 
 ## 🏗️ Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TB
     A[Camera Input] --> B[YOLOv8 Detection]
     B --> C[Python Backend]
@@ -46,11 +46,11 @@ graph TB
     H --> I[Real-time Control]
     C --> J[Data Logger]
     J --> K[CSV Analytics]
-\`\`\`
+```
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 smart-robotic-arm/
 ├── 📂 src/                     # C++ hardware control
 │   ├── main.cpp               # Main control loop & MQTT
@@ -85,18 +85,18 @@ smart-robotic-arm/
 ├── 🔧 CMakeLists.txt           # C++ build configuration
 ├── 🚀 setup.sh                # Automated installation
 └── 📋 CITATION.cff            # Academic citation
-\`\`\`
+```
 
 ## 🚀 Quick Start
 
 ### 1. Clone Repository
-\`\`\`bash
-git clone https://github.com/your-username/smart-robotic-arm.git
+```bash
+git clone https://github.com/ficrammanifur/smart-robotic-arm.git
 cd smart-robotic-arm
-\`\`\`
+```
 
 ### 2. Automated Setup
-\`\`\`bash
+```bash
 # Make setup script executable
 chmod +x setup.sh
 
@@ -105,28 +105,28 @@ chmod +x setup.sh
 
 # Reboot system
 sudo reboot
-\`\`\`
+```
 
 ### 3. Hardware Assembly
-\`\`\`bash
+```bash
 # Check hardware guide
 cat docs/HARDWARE.md
 
 # Test connections
 ./scripts/health_check.sh
-\`\`\`
+```
 
 ### 4. Launch System
-\`\`\`bash
+```bash
 # Start all services
 ./scripts/start_system.sh
 
 # Access dashboard
 # Open http://localhost:5000 in browser
-\`\`\`
+```
 
 ### 5. Manual Installation (Advanced)
-\`\`\`bash
+```bash
 # System dependencies
 sudo apt update && sudo apt install -y cmake build-essential wiringpi
 sudo apt install -y python3-pip python3-venv libopencv-dev mosquitto
@@ -139,7 +139,7 @@ cmake .. && make -j4
 cd "Backend python"
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-\`\`\`
+```
 
 ## 📊 System Performance
 
@@ -181,7 +181,7 @@ pip install -r requirements.txt
 ## 📈 Configuration
 
 ### Hardware Setup (`include/config.h`)
-\`\`\`cpp
+```cpp
 // GPIO Pin Assignments (BCM)
 #define SERVO_BASE_PIN 18      // Base rotation
 #define SERVO_SHOULDER_PIN 19  // Shoulder joint
@@ -192,10 +192,10 @@ pip install -r requirements.txt
 // Detection Parameters
 #define DETECTION_CONFIDENCE 0.5
 #define MAX_OBJECTS 10
-\`\`\`
+```
 
 ### Vision Settings (`Backend python/main.py`)
-\`\`\`python
+```python
 # Camera Configuration
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
@@ -204,7 +204,7 @@ FPS_TARGET = 30
 # YOLO Parameters
 CONFIDENCE_THRESHOLD = 0.25
 IOU_THRESHOLD = 0.45
-\`\`\`
+```
 
 ## 🔧 API Documentation
 
@@ -230,25 +230,25 @@ IOU_THRESHOLD = 0.45
 ### Common Issues
 
 **🚫 Hardware Not Detected**
-\`\`\`bash
+```bash
 # Check GPIO permissions
 sudo usermod -a -G gpio $USER
 ./scripts/health_check.sh
-\`\`\`
+```
 
 **📷 Camera Issues**
-\`\`\`bash
+```bash
 # Verify camera connection
 vcgencmd get_camera
 libcamera-hello --timeout 5000
-\`\`\`
+```
 
 **🌐 Dashboard Not Loading**
-\`\`\`bash
+```bash
 # Check Python backend
 cd "Backend python" && python main.py --debug
 netstat -tulpn | grep :5000
-\`\`\`
+```
 
 **⚡ Performance Issues**
 - Use Class 10+ SD card
