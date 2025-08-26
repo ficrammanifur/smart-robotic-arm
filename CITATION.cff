@@ -11,6 +11,7 @@ authors:
     orcid: "https://orcid.org/0009-0002-0394-3840"
 repository-code: "https://github.com/ficrammanifur/smart-robotic-arm"
 abstract: "A smart robotic arm system with computer vision tracking capabilities, designed for Raspberry Pi 5 with automatic and manual control via web dashboard. Integrates C++ hardware control, Python AI vision modules, and web dashboard monitoring using MQTT."
+license: "MIT"
 keywords:
   - "robotics"
   - "computer vision"
@@ -18,4 +19,3 @@ keywords:
   - "automation"
   - "MQTT"
   - "web dashboard"
-license: "MIT"
