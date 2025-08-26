@@ -370,7 +370,7 @@ Response: {
 ## Development Guide
 
 ### Setting Up Development Environment
-````bash
+```bash
 # Install development tools
 sudo apt install -y git cmake gdb valgrind
 pip install -r requirements-dev.txt
